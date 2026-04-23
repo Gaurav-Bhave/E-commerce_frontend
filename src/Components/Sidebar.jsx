@@ -34,6 +34,10 @@ function Sidebar() {
         </li>
 
         <li>
+           <NavLink to="/admin/category">Category</NavLink>
+        </li>
+
+        <li>
           <button onClick={mylogout}>Logout</button>
         </li>
       </nav>
