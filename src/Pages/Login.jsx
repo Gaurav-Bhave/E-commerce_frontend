@@ -4,11 +4,14 @@ import { LoginSchema } from '../Formvalidation/Loginform'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { loginuser } from '../Services/api'
+import { Myuseauth } from '../Context/Authcontext'
+import { jwtDecode } from 'jwt-decode'
 
 function Login() {
 
 
     const navigate = useNavigate()
+    const { Login } = Myuseauth();
 
 
     const myformik = useFormik({
@@ -24,13 +27,26 @@ function Login() {
             loginuser(values).then((response) => {
                 console.log(response.data)
 
-                localStorage.setItem("mytoken" , response.data.data.mytoken)
-                console.log(localStorage.getItem("mytoken"))
+                //set token for usecontext
+                Login(response.data.data.mytoken)
 
                 alert(response.data.message)
 
                 action.resetForm()
-                navigate('/admin')
+
+                const token = response.data.data.mytoken
+
+                const decoded = jwtDecode(token)
+
+                const role = decoded.role || decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+
+                if (role == "Admin") {
+                    navigate("/admin")
+                }
+                else {
+                    navigate("/customer")
+                }
+
             })
                 .catch((error) => {
                     console.log(error.response)

@@ -7,7 +7,7 @@
 //     const [loading, setloading] = useState(true)
 
 //     useEffect(() => {
-//         // allposts(
+//          allposts(
 //             .then((response) => {
 //                 setmydata(response.data)
 //                 setloading(false)
