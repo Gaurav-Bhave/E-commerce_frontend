@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+
 
 function Product() {
+
+const navigate = useNavigate()
+
+const handleclick = () => {
+  navigate("add-product")
+}
+
   return (
-    <div>Product page</div>
+
+
+    <>
+     <h2>All  Product</h2>
+
+     <button onClick={handleclick}> + Add Product</button>
+     
+     <Outlet/>
+
+    </>
   )
 }
 
