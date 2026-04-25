@@ -41,6 +41,11 @@ function Sidebar() {
         </li>
 
         <li>
+           <NavLink to="/admin/brand">Brand</NavLink>
+        </li>
+
+
+        <li>
           <button onClick={mylogout}>Logout</button>
         </li>
       </nav>

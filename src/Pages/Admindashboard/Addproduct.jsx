@@ -1,9 +1,28 @@
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AddProductSchema } from '../../Formvalidation/Addproductform'
+import { Getallcategory } from "../../Services/api"
+import { GetallBrands } from "../../Services/api"
 
 function Addproduct() {
 
+
+    const [mybranddata, setmybranddata] = useState([])
+
+    const [mycategorydata, setmycategorydata] = useState([])
+
+    useEffect(() => {
+        Getallcategory().then((Response) => {
+            setmycategorydata(Response.data.data)
+        })
+    }, [])
+
+
+    useEffect(() => {
+        GetallBrands().then((Response) => {
+            setmybranddata(Response.data.data)
+        })
+    }, [])
 
     const myformik = useFormik({
         initialValues: {
@@ -120,6 +139,20 @@ function Addproduct() {
 
                 {/* Category */}
                 <label>Category:</label>
+                {/* <select
+                    name="categoryId"
+                    onBlur={myformik.handleBlur}
+                    value={myformik.values.categoryId}
+                    onChange={myformik.handleChange}
+                >
+
+                    {
+                        mycategorydata.map((item) => (
+                            <option value={item.id}>{item.name}</option>
+                        ))
+                    }
+                </select> */}
+
                 <select
                     name="categoryId"
                     onBlur={myformik.handleBlur}
@@ -127,8 +160,14 @@ function Addproduct() {
                     onChange={myformik.handleChange}
                 >
                     <option value="">Select Category</option>
-                    <option value="cat1">Category 1</option>
-                    <option value="cat2">Category 2</option>
+
+                    {
+                        mycategorydata.map((item) => (
+                            <option key={item.id} value={item.id}>
+                                {item.name}
+                            </option>
+                        ))
+                    }
                 </select>
                 <br />
                 {myformik.touched.categoryId && myformik.errors.categoryId && (
@@ -138,6 +177,19 @@ function Addproduct() {
 
                 {/* Brand */}
                 <label>Brand:</label>
+                {/* <select
+                    name="brandId"
+                    onBlur={myformik.handleBlur}
+                    value={myformik.values.brandId}
+                    onChange={myformik.handleChange}
+                >
+                    {
+                        mybranddata.map((item) => (
+                            <option value={item.id}>{item.name}</option>
+                        ))
+                    }
+                </select> */}
+
                 <select
                     name="brandId"
                     onBlur={myformik.handleBlur}
@@ -145,8 +197,14 @@ function Addproduct() {
                     onChange={myformik.handleChange}
                 >
                     <option value="">Select Brand</option>
-                    <option value="brand1">Brand 1</option>
-                    <option value="brand2">Brand 2</option>
+
+                    {
+                        mybranddata.map((item) => (
+                            <option key={item.id} value={item.id}>
+                                {item.name}
+                            </option>
+                        ))
+                    }
                 </select>
                 <br />
                 {myformik.touched.brandId && myformik.errors.brandId && (
