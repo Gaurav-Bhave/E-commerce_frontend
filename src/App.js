@@ -22,6 +22,10 @@ import Customerprofile from './Pages/Customerdashboard/Customerprofile';
 import Customerorders from './Pages/Customerdashboard/Customerorders';
 import Customerproduct from './Pages/Customerdashboard/Customerproduct';
 import Addproduct from './Pages/Admindashboard/Addproduct';
+import Category from './Pages/Admindashboard/Category';
+import Brand from './Pages/Admindashboard/Brand';
+import AddBrand from './Pages/Admindashboard/AddBrand';
+import Addcategory from './Pages/Admindashboard/Addcategory';
 
 
 function App() {
@@ -46,6 +50,12 @@ function App() {
                 <Route path='add-product' element={<Addproduct />} />
               </Route>
               <Route path='orders' element={<Orders />} />
+              <Route path='category' element={<Category />}>
+                <Route path='add-category' element={<Addcategory />} />
+              </Route>
+              <Route path='brand' element={<Brand />}>
+                <Route path='add-brand' element={<AddBrand />} />
+              </Route>
             </Route>
 
 
