@@ -1,32 +1,29 @@
 import { useFormik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AddProductSchema } from '../../../Formvalidation/Addproductform'
-import { Getallcategory } from "../../../Services/api"
-import { GetallBrands } from "../../../Services/api"
+import { Getallcategory, GetallBrands, CreateProductwithImages } from "../../../Services/api"
 
 function Addproduct() {
 
+    const fileInputRef = useRef(null)
 
     const [mybranddata, setmybranddata] = useState([])
-
     const [mycategorydata, setmycategorydata] = useState([])
 
     useEffect(() => {
-        Getallcategory().then((Response) => {
-            setmycategorydata(Response.data.data)
+        Getallcategory().then((response) => {
+            setmycategorydata(response.data.data)
         })
     }, [])
 
-
     useEffect(() => {
-        GetallBrands().then((Response) => {
-            setmybranddata(Response.data.data)
+        GetallBrands().then((response) => {
+            setmybranddata(response.data.data)
         })
     }, [])
 
     const myformik = useFormik({
         initialValues: {
-
             productName: '',
             description: '',
             price: '',
@@ -38,35 +35,53 @@ function Addproduct() {
 
         validationSchema: AddProductSchema,
 
-        onSubmit: (values, action) => {
+        onSubmit: async (values, action) => {
 
-            console.log("form values", values)
-            console.log("Iamges", values.productImages)
+            try {
+                const formData = new FormData()
 
-            action.resetForm();
+                formData.append("productName", values.productName)
+                formData.append("description", values.description)
+                formData.append("price", values.price)
+                formData.append("categoryId", values.categoryId)
+                formData.append("brandId", values.brandId)
+                formData.append("stockQuantity", values.stockQuantity)
+
+                values.productImages.forEach((image) => {
+                    formData.append("productImages", image)
+                })
+
+                const response = await CreateProductwithImages(formData)
+
+                console.log(response.data.data)
+                alert(response.data.message)
+
+                action.resetForm()
+
+                // ✅ FILE INPUT CLEAR FIX
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = ""
+                }
+
+            } catch (error) {
+                console.log(error)
+                alert("Error while creating product")
+            }
         }
     })
 
     const handleImageChange = (event) => {
+        const files = Array.from(event.currentTarget.files)
 
-        const files = event.currentTarget.files
-
-        //file list ko array me convert kiya 
-        const filearray = Array.from(files)
-
-        if (filearray.length > 5) {
-            alert("maximum 5 images allowed !")
-            return;
+        if (files.length > 5) {
+            alert("Maximum 5 images allowed!")
+            return
         }
 
-        //array list ko formik ke values me stored kar diya
-        myformik.setFieldValue("productImages", filearray)
+        myformik.setFieldValue("productImages", files)
     }
 
-
     return (
-
-
         <>
             <h2>Add New Product</h2>
 
@@ -77,31 +92,30 @@ function Addproduct() {
                 <input
                     type="text"
                     name="productName"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.productName}
                     onChange={myformik.handleChange}
-                    placeholder="Enter product name"
+                    onBlur={myformik.handleBlur}
                 />
                 <br />
                 {myformik.touched.productName && myformik.errors.productName && (
                     <div style={{ color: 'red' }}>{myformik.errors.productName}</div>
                 )}
+
                 <br />
 
                 {/* Description */}
                 <label>Description:</label>
                 <textarea
                     name="description"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.description}
                     onChange={myformik.handleChange}
-                    placeholder="Enter product description"
-                    rows="5"
+                    onBlur={myformik.handleBlur}
                 />
                 <br />
                 {myformik.touched.description && myformik.errors.description && (
                     <div style={{ color: 'red' }}>{myformik.errors.description}</div>
                 )}
+
                 <br />
 
                 {/* Price */}
@@ -109,126 +123,97 @@ function Addproduct() {
                 <input
                     type="number"
                     name="price"
-                    step="0.01"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.price}
                     onChange={myformik.handleChange}
-                    placeholder="0.00"
+                    onBlur={myformik.handleBlur}
                 />
                 <br />
                 {myformik.touched.price && myformik.errors.price && (
                     <div style={{ color: 'red' }}>{myformik.errors.price}</div>
                 )}
+
                 <br />
 
-                {/* Stock Quantity */}
+                {/* Stock */}
                 <label>Stock Quantity:</label>
                 <input
                     type="number"
                     name="stockQuantity"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.stockQuantity}
                     onChange={myformik.handleChange}
-                    placeholder="0"
+                    onBlur={myformik.handleBlur}
                 />
                 <br />
                 {myformik.touched.stockQuantity && myformik.errors.stockQuantity && (
                     <div style={{ color: 'red' }}>{myformik.errors.stockQuantity}</div>
                 )}
+
                 <br />
 
                 {/* Category */}
                 <label>Category:</label>
-                {/* <select
-                    name="categoryId"
-                    onBlur={myformik.handleBlur}
-                    value={myformik.values.categoryId}
-                    onChange={myformik.handleChange}
-                >
-
-                    {
-                        mycategorydata.map((item) => (
-                            <option value={item.id}>{item.name}</option>
-                        ))
-                    }
-                </select> */}
-
                 <select
                     name="categoryId"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.categoryId}
                     onChange={myformik.handleChange}
+                    onBlur={myformik.handleBlur}
                 >
                     <option value="">Select Category</option>
-
-                    {
-                        mycategorydata.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.name}
-                            </option>
-                        ))
-                    }
+                    {mycategorydata.map((item) => (
+                        <option key={item.id} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
                 </select>
+
                 <br />
                 {myformik.touched.categoryId && myformik.errors.categoryId && (
                     <div style={{ color: 'red' }}>{myformik.errors.categoryId}</div>
                 )}
+
                 <br />
 
                 {/* Brand */}
                 <label>Brand:</label>
-                {/* <select
-                    name="brandId"
-                    onBlur={myformik.handleBlur}
-                    value={myformik.values.brandId}
-                    onChange={myformik.handleChange}
-                >
-                    {
-                        mybranddata.map((item) => (
-                            <option value={item.id}>{item.name}</option>
-                        ))
-                    }
-                </select> */}
-
                 <select
                     name="brandId"
-                    onBlur={myformik.handleBlur}
                     value={myformik.values.brandId}
                     onChange={myformik.handleChange}
+                    onBlur={myformik.handleBlur}
                 >
                     <option value="">Select Brand</option>
-
-                    {
-                        mybranddata.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.name}
-                            </option>
-                        ))
-                    }
+                    {mybranddata.map((item) => (
+                        <option key={item.id} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
                 </select>
+
                 <br />
                 {myformik.touched.brandId && myformik.errors.brandId && (
                     <div style={{ color: 'red' }}>{myformik.errors.brandId}</div>
                 )}
+
                 <br />
 
-                {/* Product Images - Sirf file select */}
-                <label>Product Images  : </label>
+                {/* Images */}
+                <label>Product Images:</label>
                 <input
+                    ref={fileInputRef}
                     type="file"
                     name="productImages"
                     multiple
                     accept="image/*"
                     onChange={handleImageChange}
-                // onBlur={myformik.handleBlur}
                 />
+
                 <br />
                 {myformik.touched.productImages && myformik.errors.productImages && (
                     <div style={{ color: 'red' }}>{myformik.errors.productImages}</div>
                 )}
+
                 <br />
 
-                {/* Submit Button */}
                 <button type="submit">Add Product</button>
             </form>
         </>

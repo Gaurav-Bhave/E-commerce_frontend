@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrandSchema } from "../../../Formvalidation/BrandValidation"
 import { Formik, useFormik } from 'formik'
+import {Createbrand} from "../../../Services/api"
 
 function AddBrand() {
 
@@ -12,8 +13,19 @@ function AddBrand() {
 
         validationSchema: BrandSchema,
 
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: (values , action) => {
+            
+
+            Createbrand(values).then((Response) => {
+                console.log(Response.data.data)
+                console.log(Response.data.message)
+
+                alert("Brand created succesfully !")
+                action.resetForm()
+                
+            }).catch((error) => {
+                alert("Error while creating brand !!")
+            })
         }
     })
 
