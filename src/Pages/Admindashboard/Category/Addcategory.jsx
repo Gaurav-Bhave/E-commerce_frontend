@@ -1,5 +1,5 @@
 import React from 'react'
-import { CategorySchema } from "../../Formvalidation/CategoryValidation"
+import { CategorySchema } from "../../../Formvalidation/CategoryValidation"
 import { Formik, useFormik } from 'formik'
 
 function Addcategory() {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GetallBrands } from "../../Services/api"
+import { GetallBrands } from "../../../Services/api"
 import { Outlet, useNavigate } from 'react-router-dom'
 
 function Brand() {
