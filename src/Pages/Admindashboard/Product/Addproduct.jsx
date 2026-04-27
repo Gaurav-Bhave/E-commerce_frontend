@@ -1,8 +1,8 @@
 import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { AddProductSchema } from '../../Formvalidation/Addproductform'
-import { Getallcategory } from "../../Services/api"
-import { GetallBrands } from "../../Services/api"
+import { AddProductSchema } from '../../../Formvalidation/Addproductform'
+import { Getallcategory } from "../../../Services/api"
+import { GetallBrands } from "../../../Services/api"
 
 function Addproduct() {
 

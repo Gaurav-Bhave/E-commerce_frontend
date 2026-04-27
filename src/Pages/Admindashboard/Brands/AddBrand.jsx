@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrandSchema } from "../../Formvalidation/BrandValidation"
+import { BrandSchema } from "../../../Formvalidation/BrandValidation"
 import { Formik, useFormik } from 'formik'
 
 function AddBrand() {

@@ -5,10 +5,10 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';
 
 import Adminlayout from './Components/Adminlayout';
-import Dashboard from './Pages/Admindashboard/Dashboard';
-import Users from './Pages/Admindashboard/Users';
-import Product from './Pages/Admindashboard/Product';
-import Orders from './Pages/Admindashboard/Orders';
+import Dashboard from './Pages/Admindashboard/Dashboard/Dashboard';
+import Users from './Pages/Admindashboard/User/Users';
+import Product from './Pages/Admindashboard/Product/Product';
+import Orders from './Pages/Admindashboard/Order/Orders';
 import Apitesting from './Pages/testing/Apitesting';
 import Axiosapi from './Pages/testing/Axiosapi';
 import Getapiaxios from './Pages/testing/Getapiaxios';
@@ -21,11 +21,12 @@ import Customerdefaulthome from './Components/Customerdefaulthome';
 import Customerprofile from './Pages/Customerdashboard/Customerprofile';
 import Customerorders from './Pages/Customerdashboard/Customerorders';
 import Customerproduct from './Pages/Customerdashboard/Customerproduct';
-import Addproduct from './Pages/Admindashboard/Addproduct';
-import Category from './Pages/Admindashboard/Category';
-import Brand from './Pages/Admindashboard/Brand';
-import AddBrand from './Pages/Admindashboard/AddBrand';
-import Addcategory from './Pages/Admindashboard/Addcategory';
+
+import Addproduct from './Pages/Admindashboard/Product/Addproduct';
+import Category from './Pages/Admindashboard/Category/Category';
+import Brand from './Pages/Admindashboard/Brands/Brand';
+import AddBrand from './Pages/Admindashboard/Brands/AddBrand';
+import Addcategory from './Pages/Admindashboard/Category/Addcategory';
 
 
 function App() {

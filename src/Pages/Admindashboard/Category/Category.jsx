@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Getallcategory } from "../../Services/api"
+import { Getallcategory } from "../../../Services/api"
 import { Outlet, useNavigate } from 'react-router-dom'
 
 function Category() {
