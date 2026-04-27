@@ -1,6 +1,7 @@
 import React from 'react'
 import { CategorySchema } from "../../../Formvalidation/CategoryValidation"
-import { Formik, useFormik } from 'formik'
+import { useFormik } from 'formik'
+import {Createcategory} from "../../../Services/api"
 
 function Addcategory() {
 
@@ -11,8 +12,18 @@ function Addcategory() {
 
         validationSchema: CategorySchema,
 
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: (values , action) => {
+            Createcategory(values).then((Response) => {
+                console.log(Response.data.data)
+                console.log(Response.data.message)
+
+                alert("Category created successfully !")
+                action.resetForm()
+            })
+            .catch((error) => {
+                console.log(error)
+                alert("Error while creating category !!")
+            })
         }
     })
 
