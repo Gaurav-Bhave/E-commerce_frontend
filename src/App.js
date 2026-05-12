@@ -27,6 +27,11 @@ import Category from './Pages/Admindashboard/Category/Category';
 import Brand from './Pages/Admindashboard/Brands/Brand';
 import AddBrand from './Pages/Admindashboard/Brands/AddBrand';
 import Addcategory from './Pages/Admindashboard/Category/Addcategory';
+import Productdetails from './Pages/Admindashboard/Product/Productdetails';
+import Editproduct from './Pages/Admindashboard/Product/Editproduct';
+import CustomerHome from './Pages/Customerdashboard/CustomerHome';
+import Customerproductviewdetails from './Pages/Customerdashboard/Customerproductviewdetails';
+import Cart from './Pages/Customerdashboard/CustomerCart';
 
 
 function App() {
@@ -47,9 +52,14 @@ function App() {
             <Route path='/admin' element={<Protectedroute><Adminlayout /></Protectedroute>}>
               <Route index element={<Dashboard />} />
               <Route path='users' element={<Users />} />
+
+              //product
               <Route path='products' element={<Product />}>
                 <Route path='add-product' element={<Addproduct />} />
+                <Route path=':id' element={<Productdetails />} />
+                <Route path='edit/:id' element={<Editproduct />} />
               </Route>
+
               <Route path='orders' element={<Orders />} />
               <Route path='category' element={<Category />}>
                 <Route path='add-category' element={<Addcategory />} />
@@ -61,12 +71,21 @@ function App() {
 
 
 
+
+
+
+
             //customer dashboard
             <Route path='/customer' element={<Protectedroute><Customerlayout /></Protectedroute>}>
               <Route index element={<Customerdefaulthome />} />
+              <Route path='home' element={<CustomerHome />} />
               <Route path='profile' element={<Customerprofile />} />
               <Route path='orders' element={<Customerorders />} />
               <Route path='product' element={<Customerproduct />} />
+
+              <Route path='productdetails/:id' element={<Customerproductviewdetails />} />
+
+              <Route path='cart' element={<Cart/>}/>
             </Route>
 
 
