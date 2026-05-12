@@ -10,6 +10,8 @@ function Addproduct() {
     const [mybranddata, setmybranddata] = useState([])
     const [mycategorydata, setmycategorydata] = useState([])
 
+    const [imagePreview, setImagePreview] = useState([])
+
     useEffect(() => {
         Getallcategory().then((response) => {
             setmycategorydata(response.data.data)
@@ -36,7 +38,6 @@ function Addproduct() {
         validationSchema: AddProductSchema,
 
         onSubmit: async (values, action) => {
-
             try {
                 const formData = new FormData()
 
@@ -56,12 +57,15 @@ function Addproduct() {
                 console.log(response.data.data)
                 alert(response.data.message)
 
+                // ✅ RESET EVERYTHING PROPERLY
                 action.resetForm()
 
-                // ✅ FILE INPUT CLEAR FIX
                 if (fileInputRef.current) {
                     fileInputRef.current.value = ""
                 }
+
+                setImagePreview([])
+                myformik.setFieldValue("productImages", [])
 
             } catch (error) {
                 console.log(error)
@@ -78,7 +82,28 @@ function Addproduct() {
             return
         }
 
+        const previewUrls = files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file)
+        }))
+
+        setImagePreview(previewUrls)
+
         myformik.setFieldValue("productImages", files)
+    }
+
+    const handleRemoveImage = (index) => {
+        const updatedPreview = [...imagePreview]
+        updatedPreview.splice(index, 1)
+
+        setImagePreview(updatedPreview)
+
+        const updatedFiles = updatedPreview.map(item => item.file)
+        myformik.setFieldValue("productImages", updatedFiles)
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ""
+        }
     }
 
     return (
@@ -207,10 +232,36 @@ function Addproduct() {
                     onChange={handleImageChange}
                 />
 
-                <br />
-                {myformik.touched.productImages && myformik.errors.productImages && (
-                    <div style={{ color: 'red' }}>{myformik.errors.productImages}</div>
-                )}
+                {/* Preview */}
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
+                    {imagePreview.map((item, index) => (
+                        <div key={index} style={{ position: 'relative' }}>
+                            <img
+                                src={item.url}
+                                alt="preview"
+                                width="100"
+                                height="100"
+                                style={{ objectFit: 'cover', borderRadius: '8px' }}
+                            />
+
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveImage(index)}
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 0,
+                                    background: 'red',
+                                    color: 'white',
+                                    border: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                X
+                            </button>
+                        </div>
+                    ))}
+                </div>
 
                 <br />
 
